@@ -363,7 +363,7 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         self.stride = stride
         self.path = path        
         #self.albumentations = Albumentations() if augment else None
-
+        print(path)
         try:
             f = []  # image files
             for p in path if isinstance(path, list) else [path]:
@@ -372,14 +372,17 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                     f += glob.glob(str(p / '**' / '*.*'), recursive=True)
                     # f = list(p.rglob('**/*.*'))  # pathlib
                 elif p.is_file():  # file
+                    # print(p)
                     with open(p, 'r') as t:
                         t = t.read().strip().splitlines()
                         parent = str(p.parent) + os.sep
                         f += [x.replace('./', parent) if x.startswith('./') else x for x in t]  # local to global path
                         # f += [p.parent / x.lstrip(os.sep) for x in t]  # local to global path (pathlib)
+                    # print(f)
                 else:
                     raise Exception(f'{prefix}{p} does not exist')
             self.img_files = sorted([x.replace('/', os.sep) for x in f if x.split('.')[-1].lower() in img_formats])
+            # print(self.img_files)
             # self.img_files = sorted([x for x in f if x.suffix[1:].lower() in img_formats])  # pathlib
             assert self.img_files, f'{prefix}No images found'
         except Exception as e:
@@ -387,20 +390,21 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
 
         # Check cache
         self.label_files = img2label_paths(self.img_files)  # labels
+        # print(self.label_files)
         cache_path = (p if p.is_file() else Path(self.label_files[0]).parent).with_suffix('.cache')  # cached labels
-        if cache_path.is_file():
-            cache, exists = torch.load(cache_path), True  # load
-            #if cache['hash'] != get_hash(self.label_files + self.img_files) or 'version' not in cache:  # changed
-            #    cache, exists = self.cache_labels(cache_path, prefix), False  # re-cache
-        else:
-            cache, exists = self.cache_labels(cache_path, prefix), False  # cache
+        # if cache_path.is_file():
+        #     cache, exists = torch.load(cache_path), True  # load
+        #     #if cache['hash'] != get_hash(self.label_files + self.img_files) or 'version' not in cache:  # changed
+        #     #    cache, exists = self.cache_labels(cache_path, prefix), False  # re-cache
+        # else:
+        cache, exists = self.cache_labels(cache_path, prefix), False  # cache
 
         # Display cache
         nf, nm, ne, nc, n = cache.pop('results')  # found, missing, empty, corrupted, total
         if exists:
             d = f"Scanning '{cache_path}' images and labels... {nf} found, {nm} missing, {ne} empty, {nc} corrupted"
             tqdm(None, desc=prefix + d, total=n, initial=n)  # display cache results
-        assert nf > 0 or not augment, f'{prefix}No labels in {cache_path}. Can not train without labels. See {help_url}'
+        assert nf > 0 or not augment, f'{407}{prefix}No labels in {cache_path}. Can not train without labels. See {help_url}'
 
         # Read cache
         cache.pop('hash')  # remove hash
@@ -471,8 +475,12 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         # Cache dataset labels, check images and read shapes
         x = {}  # dict
         nm, nf, ne, nc = 0, 0, 0, 0  # number missing, found, empty, duplicate
+        # print(self.img_files, self.label_files)
         pbar = tqdm(zip(self.img_files, self.label_files), desc='Scanning images', total=len(self.img_files))
         for i, (im_file, lb_file) in enumerate(pbar):
+            
+            # print(lb_file)
+            # assert 0
             try:
                 # verify images
                 im = Image.open(im_file)
@@ -481,7 +489,7 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                 segments = []  # instance segments
                 assert (shape[0] > 9) & (shape[1] > 9), f'image size {shape} <10 pixels'
                 assert im.format.lower() in img_formats, f'invalid image format {im.format}'
-
+                print(lb_file)
                 # verify labels
                 if os.path.isfile(lb_file):
                     nf += 1  # label found

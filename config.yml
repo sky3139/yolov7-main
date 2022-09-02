@@ -1,5 +1,5 @@
 %YAML:1.0
 ---
-weights: "/home/u20/桌面/yolov7-main/models/yolov7.pt"
+weights: "/home/u20/yolov7-main/models/yolov7.pt"
 conf_thres: 0.4
 iou_thres: 0.45

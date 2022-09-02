@@ -1,6 +1,4 @@
 import json
-from pyexpat import model
-from tkinter import N
 import cv2
 import torch
 from numpy import random
@@ -17,17 +15,17 @@ import numpy as np
 class MyMode():
     def get_name(self, idx):
         # Car Van Truck Bus Pedestrian Cyclist Motorcyclist Barrow  Tricyclist.
-
-        if idx in self.ndict:  # .has_key(idx):
-            return self.ndict[idx]
-        else:
-            return "no"
+        self.names[int(idx)]
+        # if idx in self.ndict:  # .has_key(idx):
+        #     return self.ndict[idx]
+        # else:
+        #     return "no"
 
     def __init__(self):
 
         self.ndict = {"2": "car", "7": "truck", "0": "pedestrian",
                       "3": "motorcycle", "5": "bus", "1": "Cyclist"}
-
+        self.ndict["7"]="truck"
         fconf = cv2.FileStorage("config.yml", cv2.FileStorage_READ)
         weights = fconf.getNode('weights').string()
         self.conf_thres = fconf.getNode('conf_thres').real()
