@@ -24,7 +24,7 @@ _ = model.eval()
 
 
 
-image = cv2.imread('./horses.jpg')  # 504x378 image
+image = cv2.imread('/home/u20/yolov7-main/inference/images/horses.jpg')  # 504x378 image
 image = letterbox(image, 640, stride=64, auto=True)[0]
 image_ = image.copy()
 image = transforms.ToTensor()(image)

@@ -4,12 +4,12 @@
 download: bash ./scripts/get_coco.sh
 
 # train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
-train: ./data/train.txt  # 118287 images
-val: ./data/train.txt  # 5000 images
-test: ./data/train.txt  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794
+train: ./data/coco/train.txt  # 118287 images
+val: ./data/coco/train.txt  # 5000 images
+test: ./data/coco/train.txt  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794
 
 # number of classes
-nc: 20
+nc: 8
 
 # class names
 # names: [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
@@ -21,6 +21,4 @@ nc: 20
 #          'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
 #          'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
 #          'hair drier', 'toothbrush' ]
-names: [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
-         'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
-         ]
+names: ['car', 'van', 'bus', 'open_bed_heavy_truck', 'close_bed_heavy_truck', 'open_bed_light_truck', 'close_bed_light_truck', 'others_truck']
